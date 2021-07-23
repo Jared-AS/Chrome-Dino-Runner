@@ -1,4 +1,4 @@
-from components.obstacle import Obstacle
+from dino_runner.components.obstacle import Obstacle
 
 class Bird(Obstacle):
 

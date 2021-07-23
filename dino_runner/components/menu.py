@@ -2,12 +2,12 @@ import pygame
 import random
 import threading
 
-from components.dinosaur import Dinosaur
-from components.cloud import Cloud
-from components.large_cactus import LargeCactus
-from components.small_cactus import SmallCactus
-from components.bird import Bird
-from utils.constants import (
+from dino_runner.components.dinosaur import Dinosaur
+from dino_runner.components.cloud import Cloud
+from dino_runner.components.large_cactus import LargeCactus
+from dino_runner.components.small_cactus import SmallCactus
+from dino_runner.components.bird import Bird
+from dino_runner.utils.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     RUNNING,

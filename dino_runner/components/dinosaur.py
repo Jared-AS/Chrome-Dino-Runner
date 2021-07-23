@@ -1,5 +1,5 @@
 import pygame
-from utils.constants import (
+from dino_runner.utils.constants import (
     DUCKING,
     RUNNING,
     JUMPING

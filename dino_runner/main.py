@@ -1,7 +1,13 @@
 import threading
+import pygame
+from dino_runner.components.game import Game
 
-from dino_runner.components.menu import menu
 
 if __name__ == "__main__":
-    t1 = threading.Thread(target=menu(death_count=0), daemon=True)
-    t1.start()
+    game = Game()
+    death_count = 0
+    while game.running:
+        if not game.playing:
+            game.show_menu(death_count=death_count)
+            death_count += 1
+

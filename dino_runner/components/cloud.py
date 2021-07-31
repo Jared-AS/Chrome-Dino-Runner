@@ -3,9 +3,10 @@ from dino_runner.utils.constants import (
     SCREEN_WIDTH,
     CLOUD
 )
+from pygame.sprite import Sprite
 
 
-class Cloud:
+class Cloud(Sprite):
 
     def __init__(self):
         self.x = SCREEN_WIDTH + random.randint(800, 1000)

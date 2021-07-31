@@ -4,9 +4,10 @@ from dino_runner.utils.constants import (
     RUNNING,
     JUMPING
 )
+from pygame.sprite import Sprite
 
 
-class Dinosaur:
+class Dinosaur(Sprite):
 
     X_POS = 80
     Y_POS = 310

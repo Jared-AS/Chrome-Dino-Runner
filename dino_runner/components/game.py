@@ -7,6 +7,7 @@ from dino_runner.components.cloud import Cloud
 from dino_runner.components.large_cactus import LargeCactus
 from dino_runner.components.small_cactus import SmallCactus
 from dino_runner.components.bird import Bird
+from dino_runner.components.star import Star
 from dino_runner.utils.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -37,6 +38,7 @@ class Game:
         self.points = 0
         self.player = Dinosaur()
         self.cloud = Cloud()
+        self.powerups = []
         self.obstacles = []
 
     def score(self):
@@ -49,6 +51,20 @@ class Game:
         textRect = text.get_rect()
         textRect.center = (1000, 40)
         self.screen.blit(text, textRect)
+
+        # showing star duration
+        if self.player.invincible:
+            time_to_show = round((self.player.invincible_time_up - pygame.time.get_ticks()) / 1000, 2)
+            if time_to_show >= 0:
+                fond = pygame.font.Font('freesansbold.ttf', 10)
+                text = fond.render(f'Invincibility enabled for {time_to_show}',
+                                   True,
+                                   (0, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (800, 40)
+                self.screen.blit(text, textRect)
+            else:
+                self.player.invincible = False
 
     def background(self):
         image_width = BG.get_width()
@@ -81,6 +97,8 @@ class Game:
 
     def create_components(self):
         self.obstacles = []
+        self.powerups = []
+        self.when_star_appears = random.randint(200, 300) + self.points
 
     def update(self):
         if len(self.obstacles) == 0:
@@ -90,13 +108,31 @@ class Game:
                 self.obstacles.append(LargeCactus(LARGE_CACTUS))
             elif random.randint(0, 2) == 2:
                 self.obstacles.append(Bird(BIRD))
+
+        if len(self.powerups) == 0:
+            if self.when_star_appears == self.points:
+                self.when_star_appears = random.randint(self.when_star_appears + 200,
+                                                        500 + self.when_star_appears)
+                self.powerups.append(Star())
+
+        for pwup in self.powerups:
+            pwup.draw(self.screen)
+            pwup.update(self.game_speed, self.powerups)
+            if self.player.dino_rect.colliderect(pwup.rect):
+                if pwup.type == 'star':
+                    self.player.invincible = True
+                    pwup.start_time = pygame.time.get_ticks()
+                    self.player.invincible_time_up = pwup.start_time + 5000
+
         for obstacle in self.obstacles:
             obstacle.draw(self.screen)
             obstacle.update(self.game_speed, self.obstacles)
-            if self.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(2000)
-                self.playing = False
-                break
+            if not self.player.invincible:
+                if self.player.dino_rect.colliderect(obstacle.rect):
+                    pygame.time.delay(2000)
+                    self.playing = False
+                    break
+
         self.background()
         self.cloud.draw(self.screen)
         self.cloud.update(self.game_speed)

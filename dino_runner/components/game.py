@@ -1,12 +1,12 @@
 import pygame
 import random
-import threading
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.cloud import Cloud
 from dino_runner.components.large_cactus import LargeCactus
 from dino_runner.components.small_cactus import SmallCactus
 from dino_runner.components.bird import Bird
+from dino_runner.components.player_lives import PlayerLives
 from dino_runner.components.star import Star
 from dino_runner.utils.constants import (
     SCREEN_WIDTH,
@@ -40,6 +40,7 @@ class Game:
         self.cloud = Cloud()
         self.powerups = []
         self.obstacles = []
+        self.player_lives = PlayerLives()
 
     def score(self):
         self.points += 1
@@ -129,9 +130,15 @@ class Game:
             obstacle.update(self.game_speed, self.obstacles)
             if not self.player.invincible:
                 if self.player.dino_rect.colliderect(obstacle.rect):
-                    pygame.time.delay(2000)
-                    self.playing = False
-                    break
+                    self.player_lives.reduce_live()
+                    if self.player_lives.lives > 0:
+                        self.player.invincible = True
+                        start_time = pygame.time.get_ticks()
+                        self.player.invincible_time_up = start_time + 1000
+                    else:
+                        pygame.time.delay(2000)
+                        self.playing = False
+                        break
 
         self.background()
         self.cloud.draw(self.screen)
@@ -140,6 +147,7 @@ class Game:
     def draw(self):
         self.score()
         self.clock.tick(FPS)
+        self.player_lives.draw(self.screen)
         pygame.display.update()
 
     def show_menu(self, death_count=0):

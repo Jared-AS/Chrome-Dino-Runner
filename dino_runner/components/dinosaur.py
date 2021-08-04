@@ -4,9 +4,10 @@ from dino_runner.utils.constants import (
     RUNNING,
     JUMPING
 )
+from pygame.sprite import Sprite
 
 
-class Dinosaur:
+class Dinosaur(Sprite):
 
     X_POS = 80
     Y_POS = 310
@@ -28,6 +29,12 @@ class Dinosaur:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
+        self.setup_state_booleans()
+
+    def setup_state_booleans(self):
+        self.has_powerup = False
+        self.invincible = False
+        self.invincible_time_up = 0
 
     def update(self, userInput):
         if self.dino_duck:

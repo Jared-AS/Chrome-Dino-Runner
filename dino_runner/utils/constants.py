@@ -27,3 +27,6 @@ CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 STAR = pygame.image.load(os.path.join(IMG_DIR, 'Other/Star.png'))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
+
+HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
+HEART_COUNT = 5

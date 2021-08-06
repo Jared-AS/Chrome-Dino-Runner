@@ -1,6 +1,5 @@
 import pygame
 import random
-import threading
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.cloud import Cloud
@@ -17,6 +16,8 @@ from dino_runner.utils.constants import (
     LARGE_CACTUS,
     BIRD
 )
+from dino_runner.components.powerup import PowerUp
+from dino_runner.components.obstacle import Obstacle
 
 TITLE = 'Chrome Dino Runner'
 ICON = pygame.image.load('assets/DinoWallpaper.png')
@@ -53,18 +54,7 @@ class Game:
         self.screen.blit(text, textRect)
 
         # showing star duration
-        if self.player.invincible:
-            time_to_show = round((self.player.invincible_time_up - pygame.time.get_ticks()) / 1000, 2)
-            if time_to_show >= 0:
-                fond = pygame.font.Font('freesansbold.ttf', 10)
-                text = fond.render(f'Invincibility enabled for {time_to_show}',
-                                   True,
-                                   (0, 0, 0))
-                textRect = text.get_rect()
-                textRect.center = (800, 40)
-                self.screen.blit(text, textRect)
-            else:
-                self.player.invincible = False
+        self.player.check_invincibility(self.screen)
 
     def background(self):
         image_width = BG.get_width()
@@ -75,6 +65,16 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
+    def run(self):
+        # Game loop: events - update - draw
+        self.obstacles = []
+        self.powerups = []
+        self.player.when_star_appears = random.randint(200, 300) + self.points
+        self.playing = True
+        while self.playing:
+            self.events()
+            self.update()
+
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -82,25 +82,7 @@ class Game:
                 self.running = False
         self.screen.fill((255, 255, 255))
 
-        userInput = pygame.key.get_pressed()
-        self.player.draw(self.screen)
-        self.player.update(userInput)
-
-    def run(self):
-        # Game loop: events - update - draw
-        self.create_components()
-        self.playing = True
-        while self.playing:
-            self.events()
-            self.update()
-            self.draw()
-
-    def create_components(self):
-        self.obstacles = []
-        self.powerups = []
-        self.when_star_appears = random.randint(200, 300) + self.points
-
-    def update(self):
+    def init_obstacles(self):
         if len(self.obstacles) == 0:
             if random.randint(0, 2) == 0:
                 self.obstacles.append(SmallCactus(SMALL_CACTUS))
@@ -109,38 +91,26 @@ class Game:
             elif random.randint(0, 2) == 2:
                 self.obstacles.append(Bird(BIRD))
 
-        if len(self.powerups) == 0:
-            if self.when_star_appears == self.points:
-                self.when_star_appears = random.randint(self.when_star_appears + 200,
-                                                        500 + self.when_star_appears)
-                self.powerups.append(Star())
+    def update(self):
+        userInput = pygame.key.get_pressed()
+        self.player.draw(self.screen)
+        self.player.update(userInput)
 
-        for pwup in self.powerups:
-            pwup.draw(self.screen)
-            pwup.update(self.game_speed, self.powerups)
-            if self.player.dino_rect.colliderect(pwup.rect):
-                if pwup.type == 'star':
-                    self.player.invincible = True
-                    pwup.start_time = pygame.time.get_ticks()
-                    self.player.invincible_time_up = pwup.start_time + 5000
+        PowerUp.check_player_powerups(self, Star())
 
-        for obstacle in self.obstacles:
-            obstacle.draw(self.screen)
-            obstacle.update(self.game_speed, self.obstacles)
-            if not self.player.invincible:
-                if self.player.dino_rect.colliderect(obstacle.rect):
-                    pygame.time.delay(2000)
-                    self.playing = False
-                    break
+        self.init_obstacles()
+        Obstacle.check_player_obstacles(self)
 
         self.background()
         self.cloud.draw(self.screen)
+
         self.cloud.update(self.game_speed)
 
-    def draw(self):
         self.score()
+
         self.clock.tick(FPS)
         pygame.display.update()
+        pygame.display.flip()
 
     def show_menu(self, death_count=0):
         self.running = True

@@ -9,9 +9,18 @@ IMG_DIR = os.path.join(os.path.dirname(__file__), '..', 'assets')
 # Assets Constants
 RUNNING = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun1.png')),
            pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2.png'))]
+
+RUNNING_STAR = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun1_star.png')),
+                pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2_star.png'))]
+
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJump.png'))
+JUMPING_STAR = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJump_star.png'))
+
 DUCKING = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1.png')),
            pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2.png'))]
+
+DUCKING_STAR = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1_star.png')),
+                pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2_star.png'))]
 
 SMALL_CACTUS = [pygame.image.load(os.path.join(IMG_DIR, 'Cactus/SmallCactus1.png')),
                 pygame.image.load(os.path.join(IMG_DIR, 'Cactus/SmallCactus2.png')),

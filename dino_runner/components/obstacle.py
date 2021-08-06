@@ -2,6 +2,7 @@ from dino_runner.utils.constants import (
     SCREEN_WIDTH,
 )
 from pygame.sprite import Sprite
+from pygame.time import delay
 
 
 class Obstacle(Sprite):
@@ -19,3 +20,14 @@ class Obstacle(Sprite):
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.rect)
+
+    @staticmethod
+    def check_player_obstacles(game):
+        for obstacle in game.obstacles:
+            obstacle.draw(game.screen)
+            obstacle.update(game.game_speed, game.obstacles)
+            if not game.player.invincible:
+                if game.player.dino_rect.colliderect(obstacle.rect):
+                    delay(2000)
+                    game.playing = False
+                    break

@@ -1,9 +1,9 @@
 import random
 import pygame
 
-from dino_runner.components.Obstacles.large_cactus import LargeCactus
-from dino_runner.components.Obstacles.small_cactus import SmallCactus
-from dino_runner.components.Obstacles.bird import Bird
+from dino_runner.components.obstacles.large_cactus import LargeCactus
+from dino_runner.components.obstacles.small_cactus import SmallCactus
+from dino_runner.components.obstacles.bird import Bird
 from dino_runner.utils.constants import (
     SMALL_CACTUS,
     LARGE_CACTUS,

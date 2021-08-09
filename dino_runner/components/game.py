@@ -3,8 +3,8 @@ import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.cloud import Cloud
 from dino_runner.components.player_lives import PlayerLives
-from dino_runner.components.Obstacles.obstacle_manager import ObstacleManager
-from dino_runner.components.PowerUps.power_up_manager import PowerUpManager
+from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.utils.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,

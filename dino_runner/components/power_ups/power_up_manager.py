@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from dino_runner.components.PowerUps.star import Star
+from dino_runner.components.power_ups.star import Star
 
 
 class PowerUpManager:

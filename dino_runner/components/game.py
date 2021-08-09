@@ -1,21 +1,15 @@
 import pygame
-import random
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.cloud import Cloud
-from dino_runner.components.large_cactus import LargeCactus
-from dino_runner.components.small_cactus import SmallCactus
-from dino_runner.components.bird import Bird
 from dino_runner.components.player_lives import PlayerLives
-from dino_runner.components.star import Star
+from dino_runner.components.Obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.PowerUps.power_up_manager import PowerUpManager
 from dino_runner.utils.constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     RUNNING,
-    BG,
-    SMALL_CACTUS,
-    LARGE_CACTUS,
-    BIRD
+    BG
 )
 
 TITLE = 'Chrome Dino Runner'
@@ -38,8 +32,8 @@ class Game:
         self.points = 0
         self.player = Dinosaur()
         self.cloud = Cloud()
-        self.powerups = []
-        self.obstacles = []
+        self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
         self.player_lives = PlayerLives()
 
     def score(self):
@@ -49,9 +43,9 @@ class Game:
         fond = pygame.font.Font('freesansbold.ttf', 20)
 
         text = fond.render('Points: ' + str(self.points), True, (0, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (1000, 40)
-        self.screen.blit(text, textRect)
+        text_rect = text.get_rect()
+        text_rect.center = (1000, 40)
+        self.screen.blit(text, text_rect)
 
         # showing star duration
         if self.player.invincible:
@@ -61,13 +55,13 @@ class Game:
                 text = fond.render(f'Invincibility enabled for {time_to_show}',
                                    True,
                                    (0, 0, 0))
-                textRect = text.get_rect()
-                textRect.center = (800, 40)
-                self.screen.blit(text, textRect)
+                text_rect = text.get_rect()
+                text_rect.center = (800, 40)
+                self.screen.blit(text, text_rect)
             else:
                 self.player.invincible = False
 
-    def background(self):
+    def draw_background(self):
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
@@ -83,72 +77,39 @@ class Game:
                 self.running = False
         self.screen.fill((255, 255, 255))
 
-        userInput = pygame.key.get_pressed()
-        self.player.draw(self.screen)
-        self.player.update(userInput)
-
     def run(self):
         # Game loop: events - update - draw
         self.create_components()
         self.playing = True
+        self.player_lives.reset_lives()
         while self.playing:
             self.events()
             self.update()
             self.draw()
 
     def create_components(self):
-        self.obstacles = []
-        self.powerups = []
-        self.when_star_appears = random.randint(200, 300) + self.points
+        self.obstacle_manager.reset_obstacles()
+        self.power_up_manager.reset_power_ups(self.points)
 
     def update(self):
-        if len(self.obstacles) == 0:
-            if random.randint(0, 2) == 0:
-                self.obstacles.append(SmallCactus(SMALL_CACTUS))
-            elif random.randint(0, 2) == 1:
-                self.obstacles.append(LargeCactus(LARGE_CACTUS))
-            elif random.randint(0, 2) == 2:
-                self.obstacles.append(Bird(BIRD))
-
-        if len(self.powerups) == 0:
-            if self.when_star_appears == self.points:
-                self.when_star_appears = random.randint(self.when_star_appears + 200,
-                                                        500 + self.when_star_appears)
-                self.powerups.append(Star())
-
-        for pwup in self.powerups:
-            pwup.draw(self.screen)
-            pwup.update(self.game_speed, self.powerups)
-            if self.player.dino_rect.colliderect(pwup.rect):
-                if pwup.type == 'star':
-                    self.player.invincible = True
-                    pwup.start_time = pygame.time.get_ticks()
-                    self.player.invincible_time_up = pwup.start_time + 5000
-
-        for obstacle in self.obstacles:
-            obstacle.draw(self.screen)
-            obstacle.update(self.game_speed, self.obstacles)
-            if not self.player.invincible:
-                if self.player.dino_rect.colliderect(obstacle.rect):
-                    self.player_lives.reduce_live()
-                    if self.player_lives.lives > 0:
-                        self.player.invincible = True
-                        start_time = pygame.time.get_ticks()
-                        self.player.invincible_time_up = start_time + 1000
-                    else:
-                        pygame.time.delay(2000)
-                        self.playing = False
-                        break
-
-        self.background()
-        self.cloud.draw(self.screen)
+        user_input = pygame.key.get_pressed()
+        self.player.update(user_input)
+        self.obstacle_manager.generate_obstacles()
+        self.power_up_manager.update(self.points, self.game_speed, self.player)
+        self.obstacle_manager.update(self)
         self.cloud.update(self.game_speed)
 
     def draw(self):
         self.score()
         self.clock.tick(FPS)
+        self.draw_background()
         self.player_lives.draw(self.screen)
+        self.player.draw(self.screen)
+        self.cloud.draw(self.screen)
+        self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
+        pygame.display.flip()
 
     def show_menu(self, death_count=0):
         self.running = True
@@ -162,7 +123,7 @@ class Game:
             text = font.render('Press any Key to Restart', True, (0, 0,
                                                                   0))
             score = font.render('Your Score: ' + str(self.points), True, (0,
-                                                                     0, 0))
+                                                                          0, 0))
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
                                 + 50)
@@ -171,7 +132,7 @@ class Game:
         textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.screen.blit(text, textRect)
         self.screen.blit(RUNNING[0], (SCREEN_WIDTH // 2 - 20, SCREEN_HEIGHT
-                                 // 2 - 140))
+                                      // 2 - 140))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

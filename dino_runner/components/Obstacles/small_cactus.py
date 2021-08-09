@@ -1,10 +1,10 @@
+from dino_runner.components.Obstacles.obstacle import Obstacle
 import random
-from dino_runner.components.obstacle import Obstacle
 
 
-class LargeCactus(Obstacle):
+class SmallCactus(Obstacle):
 
     def __init__(self, image):
         self.type = random.randint(0, 2)
         super().__init__(image, self.type)
-        self.rect.y = 300
+        self.rect.y = 325

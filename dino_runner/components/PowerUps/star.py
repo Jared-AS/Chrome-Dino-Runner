@@ -1,7 +1,7 @@
 from dino_runner.utils.constants import (
     STAR
 )
-from dino_runner.components.powerup import PowerUp
+from dino_runner.components.PowerUps.powerup import PowerUp
 
 
 class Star(PowerUp):

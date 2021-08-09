@@ -94,7 +94,6 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.obstacle_manager.generate_obstacles()
         self.power_up_manager.update(self.points, self.game_speed, self.player)
         self.obstacle_manager.update(self)
         self.cloud.update(self.game_speed)

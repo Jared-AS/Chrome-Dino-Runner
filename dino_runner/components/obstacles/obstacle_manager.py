@@ -30,6 +30,7 @@ class ObstacleManager:
         return self.obstacles
 
     def update(self, game):
+        self.generate_obstacles()
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if not game.player.invincible:

@@ -22,4 +22,6 @@ class PlayerLives:
 
     def reduce_live(self):
         self.lives -= 1
-        print(self.lives)
+
+    def reset_lives(self):
+        self.lives = HEART_COUNT

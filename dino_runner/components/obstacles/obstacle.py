@@ -17,5 +17,5 @@ class Obstacle(Sprite):
         if self.rect.x < -self.rect.width:
             obstacles.pop()
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image[self.type], self.rect)
+    def draw(self, screen):
+        screen.blit(self.image[self.type], self.rect)

@@ -33,17 +33,20 @@ class ObstacleManager:
         self.generate_obstacles()
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
-            if not game.player.invincible:
-                if game.player.dino_rect.colliderect(obstacle.rect):
+            if game.player.dino_rect.colliderect(obstacle.rect):
+                if not game.player.shield:
                     game.player_lives.reduce_live()
                     if game.player_lives.lives > 0:
-                        game.player.invincible = True
+                        game.player.shield = True
+                        game.player.show_text = False
                         start_time = pygame.time.get_ticks()
-                        game.player.invincible_time_up = start_time + 1000
+                        game.player.shield_time_up = start_time + 1000
                     else:
                         pygame.time.delay(2000)
                         game.playing = False
                         break
+                else:
+                    self.obstacles.remove(obstacle)
 
     def draw(self, screen):
         for obstacle in self.obstacles:

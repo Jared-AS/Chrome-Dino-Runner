@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from dino_runner.components.power_ups.star import Star
+from dino_runner.components.power_ups.shield import Shield
 
 
 class PowerUpManager:
@@ -22,7 +22,7 @@ class PowerUpManager:
             if self.when_star_appears == self.points:
                 print("generating powerup")
                 self.when_star_appears = random.randint(self.when_star_appears + 200, 500 + self.when_star_appears)
-                self.power_ups.append(Star())
+                self.power_ups.append(Shield())
         return self.power_ups
 
     def update(self, points, game_speed, player):
@@ -30,10 +30,13 @@ class PowerUpManager:
         for power_up in self.power_ups:
             power_up.update(game_speed, self.power_ups)
             if player.dino_rect.colliderect(power_up.rect):
-                if power_up.type == 'star':
-                    player.invincible = True
+                if isinstance(power_up, Shield):
+                    player.shield = True
+                    player.show_text = True
                     power_up.start_time = pygame.time.get_ticks()
-                    player.invincible_time_up = power_up.start_time + 5000
+                    time_random = random.randrange(5, 8)
+                    player.shield_time_up = power_up.start_time + (time_random * 1000)
+                    self.power_ups.remove(power_up)
 
     def draw(self, screen):
         for power_up in self.power_ups:

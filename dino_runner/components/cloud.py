@@ -20,6 +20,6 @@ class Cloud(Sprite):
             self.x = SCREEN_WIDTH + random.randint(2500, 3000)
             self.y = random.randint(50, 100)
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+    def draw(self, screen):
+        screen.blit(self.image, (self.x, self.y))
 

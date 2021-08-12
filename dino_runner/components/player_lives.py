@@ -13,11 +13,11 @@ class PlayerLives:
         self.rect.x = SCREEN_WIDTH
         self.lives = HEART_COUNT
 
-    def draw(self, SCREEN):
+    def draw(self, screen):
         x = 10
         y = 20
         for counter in range(self.lives):
-            SCREEN.blit(HEART, (x, y))
+            screen.blit(HEART, (x, y))
             x += 30
 
     def reduce_live(self):

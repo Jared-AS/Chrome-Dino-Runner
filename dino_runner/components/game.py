@@ -48,18 +48,7 @@ class Game:
         self.screen.blit(text, text_rect)
 
         # showing star duration
-        if self.player.invincible:
-            time_to_show = round((self.player.invincible_time_up - pygame.time.get_ticks()) / 1000, 2)
-            if time_to_show >= 0:
-                fond = pygame.font.Font('freesansbold.ttf', 10)
-                text = fond.render(f'Invincibility enabled for {time_to_show}',
-                                   True,
-                                   (0, 0, 0))
-                text_rect = text.get_rect()
-                text_rect.center = (800, 40)
-                self.screen.blit(text, text_rect)
-            else:
-                self.player.invincible = False
+        self.player.check_invincibility(self.screen)
 
     def draw_background(self):
         image_width = BG.get_width()

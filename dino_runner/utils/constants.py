@@ -10,17 +10,24 @@ IMG_DIR = os.path.join(os.path.dirname(__file__), '..', 'assets')
 RUNNING = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun1.png')),
            pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2.png'))]
 
-RUNNING_STAR = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun1Shield.png')),
-                pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2.png'))]
+RUNNING_SHIELD = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun1Shield.png')),
+                  pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2.png'))]
+
+RUNNING_HAMMER = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1Hammer.png')),
+                  pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoRun2.png'))]
 
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJump.png'))
-JUMPING_STAR = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJumpShield.png'))
+JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJumpShield.png'))
+JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoJumpHammer.png'))
 
 DUCKING = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1.png')),
            pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2.png'))]
 
-DUCKING_STAR = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1Shield.png')),
-                pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2.png'))]
+DUCKING_SHIELD = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1Shield.png')),
+                  pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2.png'))]
+
+DUCKING_HAMMER = [pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck1Hammer.png')),
+                  pygame.image.load(os.path.join(IMG_DIR, 'Dino/DinoDuck2.png'))]
 
 SMALL_CACTUS = [pygame.image.load(os.path.join(IMG_DIR, 'Cactus/SmallCactus1.png')),
                 pygame.image.load(os.path.join(IMG_DIR, 'Cactus/SmallCactus2.png')),
@@ -40,3 +47,10 @@ BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 HEART_COUNT = 5
+HAMMER_POWER_UP = 15
+
+DEFAULT_TYPE = "default"
+SHIELD_TYPE = "shield"
+HAMMER_TYPE = "hammer"
+
+BLACK = (0, 0, 0)

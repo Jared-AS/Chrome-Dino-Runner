@@ -32,7 +32,12 @@ class ObstacleManager:
     def update(self, game):
         self.generate_obstacles()
         for obstacle in self.obstacles:
-            obstacle.update(game.game_speed, self.obstacles)
+            if game.player.hammer is not None and game.player.hammer.rect.colliderect(obstacle.rect):
+                game.player.hammer.kill()
+                self.obstacles.pop()
+            else:
+                obstacle.update(game.game_speed, self.obstacles)
+
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.shield:
                     game.player_lives.reduce_live()

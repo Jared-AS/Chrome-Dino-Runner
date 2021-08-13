@@ -9,8 +9,9 @@ from pygame.sprite import Sprite
 
 
 class PowerUp(Sprite):
-    def __init__(self, image):
+    def __init__(self, image, type):
         self.image = image
+        self.type = type
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_HEIGHT + random.randint(800, 1000)
         self.rect.y = random.randint(100, 150)

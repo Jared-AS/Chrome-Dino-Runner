@@ -1,8 +1,7 @@
 from dino_runner.utils.constants import (
-    BLACK, HAMMER, SCREEN_WIDTH
+    HAMMER, SCREEN_WIDTH
 )
 from pygame.sprite import Sprite
-from pygame import Surface
 
 
 class Hammer(Sprite):

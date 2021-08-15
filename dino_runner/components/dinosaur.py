@@ -64,7 +64,7 @@ class Dinosaur(Sprite):
             self.hammer = Hammer(self.dino_rect.x + 100, self.dino_rect.y + 50)
             self.hammer_enabled = max(self.hammer_enabled - 1, 0)
             if self.hammer_enabled == 0:
-                self.update_type(HAMMER_TYPE)
+                self.update_to_default(HAMMER_TYPE)
 
         if user_input[pygame.K_UP] and not self.dino_jump:
             self.dino_duck = False
@@ -79,7 +79,7 @@ class Dinosaur(Sprite):
             self.dino_run = True
             self.dino_jump = False
 
-        if self.hammer is not None:
+        if self.hammer:
             self.hammer.update()
 
     def duck(self):
@@ -107,7 +107,7 @@ class Dinosaur(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
-        if self.hammer is not None:
+        if self.hammer:
             self.hammer.draw(screen)
 
     def check_invincibility(self, screen):
@@ -124,8 +124,8 @@ class Dinosaur(Sprite):
                     screen.blit(text, textRect)
             else:
                 self.shield = False
-                self.update_type(SHIELD_TYPE)
+                self.update_to_default (SHIELD_TYPE)
 
-    def update_type(self, current_type):
+    def update_to_default (self, current_type):
         if self.type == current_type:
             self.type = DEFAULT_TYPE
